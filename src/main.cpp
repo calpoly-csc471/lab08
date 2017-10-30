@@ -124,9 +124,14 @@ public:
 		// Initialize the GLSL program.
 		prog = make_shared<Program>();
 		prog->setVerbose(true);
-		prog->setShaderNames(resourceDirectory + "/simple_vert.glsl",
-									resourceDirectory + "/simple_frag.glsl");
-		prog->init();
+		prog->setShaderNames(
+			resourceDirectory + "/simple_vert.glsl",
+			resourceDirectory + "/simple_frag.glsl");
+		if (! prog->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
 		prog->addUniform("P");
 		prog->addUniform("MV");
 		prog->addUniform("MatAmb");
@@ -142,10 +147,8 @@ public:
 
 		//set up depth necessary as rendering a mesh that needs depth test
 		glBindRenderbuffer(GL_RENDERBUFFER, depthBuf);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
-									 width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-											GL_RENDERBUFFER, depthBuf);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuf);
 
 		//more FBO set up
 		GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
@@ -159,9 +162,14 @@ public:
 		//next lab modify and possibly add other shaders to complete blur
 		texProg = make_shared<Program>();
 		texProg->setVerbose(true);
-		texProg->setShaderNames(resourceDirectory + "/pass_vert.glsl",
-										 resourceDirectory + "/tex_fragH.glsl");
-		texProg->init();
+		texProg->setShaderNames(
+			resourceDirectory + "/pass_vert.glsl",
+			resourceDirectory + "/tex_fragH.glsl");
+		if (! texProg->init())
+		{
+			std::cerr << "One or more shaders failed to compile... exiting!" << std::endl;
+			exit(1);
+		}
 		texProg->addUniform("texBuf");
 		texProg->addAttribute("vertPos");
 		texProg->addUniform("dir");
