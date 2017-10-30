@@ -53,11 +53,12 @@ public:
 	GLuint texBuf[2];
 	GLuint depthBuf;
 
-	int FirstTime = 1;
-	int Moving = 0;
+	bool FirstTime = true;
+	bool Moving = false;
 	int gMat = 0;
+
 	float cTheta = 0;
-	int mouseDown = 0;
+	bool mouseDown = false;
 
 	void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
@@ -79,10 +80,9 @@ public:
 		}
 	}
 
-
 	void scrollCallback(GLFWwindow* window, double deltaX, double deltaY)
 	{
-			cTheta += deltaX;
+		cTheta += (float) deltaX;
 	}
 
 	void mouseCallback(GLFWwindow *window, int button, int action, int mods)
@@ -91,16 +91,16 @@ public:
 
 		if (action == GLFW_PRESS)
 		{
-			mouseDown = 1;
+			mouseDown = true;
 			glfwGetCursorPos(window, &posX, &posY);
 			cout << "Pos X " << posX << " Pos Y " << posY << endl;
-			Moving = 1;
+			Moving = true;
 		}
 
 		if (action == GLFW_RELEASE)
 		{
-			Moving = 0;
-			mouseDown = 0;
+			Moving = false;
+			mouseDown = false;
 		}
 	}
 
@@ -109,8 +109,8 @@ public:
 		glViewport(0, 0, width, height);
 	}
 
-	 void init(const std::string& resourceDirectory)
-	 {
+	void init(const std::string& resourceDirectory)
+	{
 		int width, height;
 		glfwGetFramebufferSize(windowManager->getHandle(), &width, &height);
 		GLSL::checkVersion();
@@ -167,8 +167,8 @@ public:
 		texProg->addUniform("dir");
 	 }
 
-	 void initGeom(const std::string& resourceDirectory)
-	 {
+	void initGeom(const std::string& resourceDirectory)
+	{
 		// Initialize the obj mesh VBOs etc
 		shape = make_shared<Shape>();
 		shape->loadMesh(resourceDirectory + "/Nefertiti-100K.obj");
@@ -288,20 +288,20 @@ public:
 			MV->rotate(radians(cTheta), vec3(0, 1, 0));
 
 			float tx, tz, theta = 0;
-			for (int i =0; i < 10; i++)
+			for (int i = 0; i < 10; i++)
 			{
-				tx = (4.0) * sin(theta);
-				tz = (4.0) * cos(theta);
+				tx = (4.f) * sin(theta);
+				tz = (4.f) * cos(theta);
 				/* draw left mesh */
 				MV->pushMatrix();
-				MV->translate(vec3(tx, 0.0, tz));
-				MV->rotate(3.14+theta, vec3(0, 1, 0));
-				MV->rotate(radians(-90.0), vec3(1, 0, 0));
-				SetMaterial(i%4);
+				MV->translate(vec3(tx, 0.f, tz));
+				MV->rotate(3.14f + theta, vec3(0, 1, 0));
+				MV->rotate(radians(-90.f), vec3(1, 0, 0));
+				SetMaterial(i % 4);
 				glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE,value_ptr(MV->topMatrix()) );
 				shape->draw(prog);
 				MV->popMatrix();
-				theta += 6.28/10;
+				theta += 6.28f / 10.f;
 			}
 		MV->popMatrix();
 
@@ -329,7 +329,7 @@ public:
 			if (FirstTime)
 			{
 				assert(GLTextureWriter::WriteImage(texBuf[0], "Texture_output.png"));
-				FirstTime = 0;
+				FirstTime = false;
 			}
 		}
 	}
@@ -340,20 +340,20 @@ public:
 		switch (i)
 		{
 		case 0: //shiny blue plastic
-			glUniform3f(prog->getUniform("MatAmb"), 0.02, 0.04, 0.2);
-			glUniform3f(prog->getUniform("MatDif"), 0.0, 0.16, 0.9);
+			glUniform3f(prog->getUniform("MatAmb"), 0.02f, 0.04f, 0.2f);
+			glUniform3f(prog->getUniform("MatDif"), 0.0f, 0.16f, 0.9f);
 			break;
 		case 1: // flat grey
-			glUniform3f(prog->getUniform("MatAmb"), 0.13, 0.13, 0.14);
-			glUniform3f(prog->getUniform("MatDif"), 0.3, 0.3, 0.4);
+			glUniform3f(prog->getUniform("MatAmb"), 0.13f, 0.13f, 0.14f);
+			glUniform3f(prog->getUniform("MatDif"), 0.3f, 0.3f, 0.4f);
 			break;
 		case 2: //brass
-			glUniform3f(prog->getUniform("MatAmb"), 0.3294, 0.2235, 0.02745);
-			glUniform3f(prog->getUniform("MatDif"), 0.7804, 0.5686, 0.11373);
+			glUniform3f(prog->getUniform("MatAmb"), 0.3294f, 0.2235f, 0.02745f);
+			glUniform3f(prog->getUniform("MatDif"), 0.7804f, 0.5686f, 0.11373f);
 			break;
 		 case 3: //copper
-			glUniform3f(prog->getUniform("MatAmb"), 0.1913, 0.0735, 0.0225);
-			glUniform3f(prog->getUniform("MatDif"), 0.7038, 0.27048, 0.0828);
+			glUniform3f(prog->getUniform("MatAmb"), 0.1913f, 0.0735f, 0.0225f);
+			glUniform3f(prog->getUniform("MatDif"), 0.7038f, 0.27048f, 0.0828f);
 			break;
 		}
 	}
