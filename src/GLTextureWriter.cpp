@@ -1,6 +1,8 @@
+
 #include "GLTextureWriter.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+
 #include <iostream>
 
 
@@ -10,17 +12,18 @@
  */
 int getTextureWidth()
 {
-	GLint texWidth; 
+	GLint texWidth;
 	glGetTexLevelParameteriv(GL_TEXTURE_2D,0,GL_TEXTURE_WIDTH,&texWidth);
 	return texWidth;
 }
+
 /**
  * Retrieve the height of the texture
  * @return the texture height, in pixels.
  */
 int getTextureHeight()
 {
-	GLint texHeight; 
+	GLint texHeight;
 	glGetTexLevelParameteriv(GL_TEXTURE_2D,0,GL_TEXTURE_HEIGHT,&texHeight);
 	return texHeight;
 }
@@ -37,8 +40,8 @@ void getData(void * dataBuffer, GLenum format, GLenum type)
 		type,
 		dataBuffer);
 	//Flip data buffer
-	
 }
+
 /**
  * Write a texture to a file
  * @param  texture  a shared pointer to a texture
@@ -49,6 +52,7 @@ bool GLTextureWriter::WriteImage(std::shared_ptr<Texture> texture, std::string f
 {
 	return WriteImage(texture->getID(), fileName);
 }
+
 /**
  * Write a texture to a file
  * @param  texture a texture object
@@ -91,28 +95,37 @@ bool GLTextureWriter::WriteImage(GLint tid, std::string imgName)
 	//Backup old openGL state.
 	GLint backupBoundTexture;
 	glGetIntegerv(GL_TEXTURE_BINDING_2D, &backupBoundTexture);
+
 	//Bind texture to buffer
 	glBindTexture(GL_TEXTURE_2D,tid);
+
 	//Retrieve width and height
 	int txWidth = getTextureWidth();
 	int txHeight = getTextureWidth();
+
+
 	//Allocate buffer
 	char * dataBuffer = new char[txWidth*txHeight*3];
+
 	//Get data from Opengl
 	getData(dataBuffer, GL_RGB, GL_UNSIGNED_BYTE);
+
 	//Flip data for output
 	flip_buffer(dataBuffer,txWidth,txHeight);
+
+
 	//Write image to PNG
 	int res =  stbi_write_png(imgName.c_str(), txWidth, txHeight, 3, dataBuffer, sizeof(char)*3*txWidth);
 	if(!res)
 	{
 		std::cerr << "Could not write to  " << imgName << std::endl;
 	}
+
 	//Cleanup
 	delete [] dataBuffer;
+
 	//Bind old texture
 	glBindTexture(GL_TEXTURE_2D,backupBoundTexture);
+
 	return res;
-
-
 }
