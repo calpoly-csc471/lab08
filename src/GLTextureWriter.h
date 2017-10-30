@@ -1,11 +1,12 @@
 #ifndef __GLTextureWriter__
-#define __GLTextureWriter__ 
+#define __GLTextureWriter__
 
 #include <string>
+#include <memory>
 #include "Texture.h"
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 /**
- * GLTextureWriter outputs a three channel (GL_RGB) 
+ * GLTextureWriter outputs a three channel (GL_RGB)
  * image to a png file given by file name.
  *
  * Contact kpidding@calpoly.edu for any support questions!
