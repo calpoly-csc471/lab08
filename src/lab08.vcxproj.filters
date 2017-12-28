@@ -12,20 +12,27 @@
     <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="GLTextureWriter.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="..\ext\tiny_obj_loader\tiny_obj_loader.cpp">
+      <Filter>ext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
     <ClInclude Include="GLSL.h" />
     <ClInclude Include="WindowManager.h" />
     <ClInclude Include="Shape.h" />
-    <ClInclude Include="tiny_obj_loader.h">
-      <Filter>ext</Filter>
-    </ClInclude>
     <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="GLTextureWriter.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="stb_image_write.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="..\ext\tiny_obj_loader\tiny_obj_loader.h">
+      <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\stb\stb_image.h">
+      <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\stb\stb_image_write.h">
+      <Filter>ext</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ext">
