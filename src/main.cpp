@@ -183,7 +183,7 @@ public:
 	{
 		// Initialize the obj mesh VBOs etc
 		shape = make_shared<Shape>();
-		shape->loadMesh(resourceDirectory + "/Nefertiti-100K.obj");
+		shape->loadMesh(resourceDirectory + "/Nefertiti-10K.obj");
 		shape->resize();
 		shape->init();
 		//Initialize the geometry to render a quad to the screen
