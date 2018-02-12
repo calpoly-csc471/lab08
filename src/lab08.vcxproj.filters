@@ -38,5 +38,25 @@
     <Filter Include="ext">
       <UniqueIdentifier>{a1735e5b-c01d-45eb-b937-869f0ba27591}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{73a903a3-d0b3-42f2-ac6f-7132566f4b50}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\pass_vert.glsl">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\simple_frag.glsl">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\simple_vert.glsl">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\tex_frag.glsl">
+      <Filter>resources</Filter>
+    </None>
+    <None Include="..\resources\tex_fragH.glsl">
+      <Filter>resources</Filter>
+    </None>
   </ItemGroup>
 </Project>

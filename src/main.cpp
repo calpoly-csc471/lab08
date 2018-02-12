@@ -137,7 +137,8 @@ public:
 			exit(1);
 		}
 		prog->addUniform("P");
-		prog->addUniform("MV");
+		prog->addUniform("V");
+		prog->addUniform("M");
 		prog->addUniform("MatAmb");
 		prog->addUniform("MatDif");
 		prog->addAttribute("vertPos");
@@ -284,20 +285,24 @@ public:
 		float aspect = width/(float)height;
 
 		// Create the matrix stacks
-		auto P = make_shared<MatrixStack>();
-		auto MV = make_shared<MatrixStack>();
+		auto Projection = make_shared<MatrixStack>();
+		auto View = make_shared<MatrixStack>();
+		auto Model = make_shared<MatrixStack>();
 		// Apply perspective projection.
-		P->pushMatrix();
-		P->perspective(45.0f, aspect, 0.01f, 100.0f);
+		Projection->pushMatrix();
+		Projection->perspective(45.0f, aspect, 0.01f, 100.0f);
+		// Identity view - for now
+		View->pushMatrix();
 
 		//Draw our scene - two meshes - right now to a texture
 		prog->bind();
-		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(P->topMatrix()));
+		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
 
 		// globl transforms for 'camera' (you will fix this now!)
-		MV->pushMatrix();
-			MV->loadIdentity();
-			MV->rotate(radians(cTheta), vec3(0, 1, 0));
+		Model->pushMatrix();
+			Model->loadIdentity();
+			Model->rotate(radians(cTheta), vec3(0, 1, 0));
 
 			float tx, tz, theta = 0;
 			for (int i = 0; i < 10; i++)
@@ -305,19 +310,20 @@ public:
 				tx = (4.f) * sin(theta);
 				tz = (4.f) * cos(theta);
 				/* draw left mesh */
-				MV->pushMatrix();
-				MV->translate(vec3(tx, 0.f, tz));
-				MV->rotate(3.14f + theta, vec3(0, 1, 0));
-				MV->rotate(radians(-90.f), vec3(1, 0, 0));
+				Model->pushMatrix();
+				Model->translate(vec3(tx, 0.f, tz));
+				Model->rotate(3.14f + theta, vec3(0, 1, 0));
+				Model->rotate(radians(-90.f), vec3(1, 0, 0));
 				SetMaterial(i % 4);
-				glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE,value_ptr(MV->topMatrix()) );
+				glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE,value_ptr(Model->topMatrix()) );
 				shape->draw(prog);
-				MV->popMatrix();
+				Model->popMatrix();
 				theta += 6.28f / 10.f;
 			}
-		MV->popMatrix();
+		Model->popMatrix();
 
-		P->popMatrix();
+		Projection->popMatrix();
+		View->popMatrix();
 
 		prog->unbind();
 
