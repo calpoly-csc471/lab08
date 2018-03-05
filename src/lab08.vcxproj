@@ -91,6 +91,13 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="WindowManager.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\pass_vert.glsl" />
+    <None Include="..\resources\simple_frag.glsl" />
+    <None Include="..\resources\simple_vert.glsl" />
+    <None Include="..\resources\tex_frag.glsl" />
+    <None Include="..\resources\tex_fragH.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
